@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #cb0904;
+  background: #d67aff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2509,4 +2509,9 @@ header.header {
 body {
   background: url("/images/hexo-background1.jpg") no-repeat center fixed;
   background-size: cover;
+}
+.content-wrap {
+  background: rgba(255,255,255,0.8); /* 白色半透明背景 */
+  padding: 20px;
+  border-radius: 10px;
 }
