@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #baff7d;
+  background: #cb0904;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2507,6 +2507,6 @@ header.header {
 }
 /* 全局背景设置 */
 body {
-  background: url("/themes/next/source/images/hexo-background1.jpg") no-repeat center fixed;
+  background: url("/images/hexo-background1.jpg") no-repeat center fixed;
   background-size: cover;
 }
