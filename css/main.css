@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #f76fff;
+  background: #f0ed13;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2535,12 +2535,5 @@ body {
     margin: 20px 10px; /* 缩小边距 */
     padding: 20px; /* 减少内边距 */
     border-radius: 8px; /* 小圆角 */
-  }
-}
-/* 暗色模式适配 */
-@media (prefers-color-scheme: dark) {
-  .content-container {
-    background: rgba(30,30,30,0.85); /* 深色半透明背景 */
-    color: #f0f0f0; /* 浅色文字 */
   }
 }
