@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #8f5465;
+  background: #ff5be3;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2514,4 +2514,19 @@ body {
   background: rgba(255,255,255,0.8); /* 白色半透明背景 */
   padding: 20px;
   border-radius: 10px;
+}
+/* 在背景图上叠加一层半透明黑色遮罩 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* 透明度 0.4（0~1，越大越暗） */
+  z-index: -1; /* 确保遮罩在背景图之上，但在内容之下 */
+}
+/* 确保文字颜色足够亮 */
+.post-body {
+  color: #fff; /* 如果文字仍然看不清，可以调亮 */
 }
