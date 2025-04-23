@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #abe0c4;
+  background: #9018ff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2515,18 +2515,19 @@ body {
   padding: 20px;
   border-radius: 10px;
 }
-/* 在背景图上叠加一层半透明黑色遮罩 */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4); /* 透明度 0.4（0~1，越大越暗） */
-  z-index: -1; /* 确保遮罩在背景图之上，但在内容之下 */
+/* 主内容区样式 */
+.content-wrap {
+  background: rgba(255,255,255,0.85); /* 半透明白色背景 */
+  border-radius: 12px; /* 圆角 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 阴影增强层次感 */
+  padding: 30px; /* 内边距 */
+  margin: 20px auto; /* 居中 + 外间距 */
+  max-width: 900px; /* 限制宽度（避免过宽） */
 }
-/* 确保文字颜色足够亮 */
-.post-body {
-  color: #fff; /* 如果文字仍然看不清，可以调亮 */
+/* 适配暗色模式（可选） */
+@media (prefers-color-scheme: dark) {
+  .content-wrap {
+    background: rgba(30,30,30,0.85); /* 深色背景 */
+    color: #eee; /* 浅色文字 */
+  }
 }
