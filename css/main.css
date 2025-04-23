@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #c846ff;
+  background: #ff1cff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2512,7 +2512,7 @@ body {
 }
 /* 主容器样式（居中半透明卡片） */
 .content-container {
-  background: rgba(255,255,255,0.5); /* 半透明白色背景 */
+  background: rgba(255,255,255,0.8); /* 半透明白色背景 */
   border-radius: 12px; /* 圆角 */
   box-shadow: 0 4px 16px rgba(0,0,0,0.1); /* 柔和阴影 */
   padding: 40px; /* 内边距 */
