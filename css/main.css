@@ -1220,7 +1220,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #9018ff;
+  background: #cb99ff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2515,19 +2515,10 @@ body {
   padding: 20px;
   border-radius: 10px;
 }
-/* 主内容区样式 */
-.content-wrap {
-  background: rgba(255,255,255,0.85); /* 半透明白色背景 */
-  border-radius: 12px; /* 圆角 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 阴影增强层次感 */
-  padding: 30px; /* 内边距 */
-  margin: 20px auto; /* 居中 + 外间距 */
-  max-width: 900px; /* 限制宽度（避免过宽） */
-}
-/* 适配暗色模式（可选） */
-@media (prefers-color-scheme: dark) {
-  .content-wrap {
-    background: rgba(30,30,30,0.85); /* 深色背景 */
-    color: #eee; /* 浅色文字 */
-  }
+/* 仅针对文章内容 */
+.post-block {
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
 }
