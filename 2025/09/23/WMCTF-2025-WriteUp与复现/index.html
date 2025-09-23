@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>WMCTF-2025 WriteUp与复现 | 天空极光 (๑´ڡ`๑)</title><meta name="author" content="SkyAur0ra"><meta name="copyright" content="SkyAur0ra"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="第一次玩WMCTF，感觉挺有意思">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WMCTF-2025 WriteUp与复现">
+<meta property="og:url" content="http://example.com/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="天空极光 (๑´ڡ&#96;๑)">
+<meta property="og:description" content="第一次玩WMCTF，感觉挺有意思">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar2.jpg">
+<meta property="article:published_time" content="2025-09-23T03:28:43.000Z">
+<meta property="article:modified_time" content="2025-09-23T09:14:18.226Z">
+<meta property="article:author" content="SkyAur0ra">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "WMCTF-2025 WriteUp与复现",
+  "url": "http://example.com/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/",
+  "image": "http://example.com/img/avatar2.jpg",
+  "datePublished": "2025-09-23T03:28:43.000Z",
+  "dateModified": "2025-09-23T09:14:18.226Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "SkyAur0ra",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon1.jpg"><link rel="canonical" href="http://example.com/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'WMCTF-2025 WriteUp与复现',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(/img/background2.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar2.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">天空极光 (๑´ڡ`๑)</span></a><a class="nav-page-title" href="/"><span class="site-name">WMCTF-2025 WriteUp与复现</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-book"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">WMCTF-2025 WriteUp与复现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-23T03:28:43.000Z" title="发表于 2025-09-23 11:28:43">2025-09-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-23T09:14:18.226Z" title="更新于 2025-09-23 17:14:18">2025-09-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="成绩"><a href="#成绩" class="headerlink" title="成绩"></a>成绩</h2><p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/score.png" alt="score"></p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>逆向有两题都是签到，Want2BecomeMagicalGirl非常复杂（对于目前的我）,VideoPlayer没看，后面去做misc了，学长出了一道phishing email，我花了挺久做Githacker，但是卡死在不知道加密工具上，后来发现应该先做Voice_hacker的。</p>
+<h2 id="reverse"><a href="#reverse" class="headerlink" title="reverse"></a>reverse</h2><h3 id="Catfriend"><a href="#Catfriend" class="headerlink" title="Catfriend"></a>Catfriend</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">小猫猫和它的秘密，你可以找到猫猫的秘密吗？</span><br><span class="line"></span><br><span class="line">Kitten cat and its secrets, can you find the secret of the cat?</span><br><span class="line"></span><br><span class="line">百度网盘：https://pan.baidu.com/s/1Y7uZP6iLFgGyROetJCxxUw?pwd=utxb</span><br><span class="line"></span><br><span class="line">Google Dirve: https://drive.google.com/file/d/1w_tj3ASPQtv5qtNOvk8306-H6ze7Jx99/view?usp=drive_link</span><br></pre></td></tr></table></figure>
+
+<p>附件是一个arm架构的exe，ida打开，可以在字符串（shift+F12）里面看见flag：</p>
+<p><img src="/catfriend.png" alt="catfriend"></p>
+<p>flag: WMCTF{5a3e8f2b-1c7d-4a6f-b89e-0d3c2f1a4b5c}</p>
+<h3 id="Appfriend"><a href="#Appfriend" class="headerlink" title="Appfriend"></a>Appfriend</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">我们开发了一个名为SecureBox的安全存储应用，它使用了多层保护机制来保护用户数据。你能逆向分析并提取出被保护的秘密吗？</span><br><span class="line"></span><br><span class="line">We have developed a secure storage application called SecureBox, which uses multiple layers of protection mechanisms to safeguard user data. Can you perform reverse engineering and extract the protected secrets?</span><br><span class="line"></span><br><span class="line">百度网盘：https://pan.baidu.com/s/1CK9_2N8dnuUOleDKZ1lOTw?pwd=p5wu</span><br><span class="line"></span><br><span class="line">Google Dirve: https://drive.google.com/file/d/169Il1QKd7AR6RtOOheR5NN-Lc46Cdrgh/view?usp=drive_link</span><br></pre></td></tr></table></figure>
+
+<p>一道简单的apk，jadx打开之后直接看源代码里面com.example.yellow包，发现so的导入：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">&quot;yellow&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>yellow包里面定义了一个checkflag函数，调用在com.google.android.material.datepicker包，关键代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="type">MainActivity</span> <span class="variable">mainActivity</span> <span class="operator">=</span> (MainActivity) <span class="built_in">this</span>.f2139b;</span><br><span class="line"><span class="type">String</span> <span class="variable">strValueOf</span> <span class="operator">=</span> String.valueOf(mainActivity.f1936x.getText());</span><br><span class="line"><span class="keyword">if</span> (!strValueOf.isEmpty()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (strValueOf.length() == <span class="number">32</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!mainActivity.checkflag(strValueOf)) &#123;</span><br><span class="line">            Toast.makeText(mainActivity.getApplicationContext(), <span class="string">&quot;flag error!&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Toast.makeText(mainActivity.getApplicationContext(), <span class="string">&quot;flag success!&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Toast.makeText(mainActivity.getApplicationContext(), <span class="string">&quot;length error!&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    Toast.makeText(mainActivity.getApplicationContext(), <span class="string">&quot;empty!&quot;</span>, <span class="number">1</span>).show();</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>那么flag的加密和密文以及校验都在libyellow.so里面了，这里我选择x86_64架构的so进行分析。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">__int64 __fastcall <span class="title function_">Java_com_example_yellow_MainActivity_checkflag</span><span class="params">(__int64 *a1, __int64 a2, __int64 a3)</span></span><br><span class="line">&#123;</span><br><span class="line">  __int64 v3; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v4; <span class="comment">// r15</span></span><br><span class="line">  <span class="type">int</span> v5; <span class="comment">// eax</span></span><br><span class="line">  _BYTE *v6; <span class="comment">// rbx</span></span><br><span class="line">  __int64 v7; <span class="comment">// r12</span></span><br><span class="line">  <span class="type">int</span> v8; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v9; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v10; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v11; <span class="comment">// r15d</span></span><br><span class="line">  __int64 v12; <span class="comment">// rdx</span></span><br><span class="line">  __int64 v13; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v14; <span class="comment">// rdx</span></span><br><span class="line">  <span class="type">bool</span> v15; <span class="comment">// zf</span></span><br><span class="line">  <span class="type">bool</span> v16; <span class="comment">// cf</span></span><br><span class="line">  __int64 v18; <span class="comment">// [rsp+0h] [rbp-170h] BYREF</span></span><br><span class="line">  __int64 v19; <span class="comment">// [rsp+8h] [rbp-168h]</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v20; <span class="comment">// [rsp+10h] [rbp-160h]</span></span><br><span class="line">  __int64 *v21; <span class="comment">// [rsp+18h] [rbp-158h]</span></span><br><span class="line">  __int64 v22; <span class="comment">// [rsp+20h] [rbp-150h]</span></span><br><span class="line">  <span class="type">char</span> v23[<span class="number">264</span>]; <span class="comment">// [rsp+28h] [rbp-148h] BYREF</span></span><br><span class="line">  __int128 v24; <span class="comment">// [rsp+130h] [rbp-40h] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v25; <span class="comment">// [rsp+140h] [rbp-30h]</span></span><br><span class="line"></span><br><span class="line">  v25 = __readfsqword(<span class="number">0x28u</span>);</span><br><span class="line">  v3 = *a1;</span><br><span class="line">  v22 = <span class="number">0LL</span>;</span><br><span class="line">  v19 = a3;</span><br><span class="line">  v4 = (*(v3 + <span class="number">1352</span>))(a1, a3, <span class="number">0LL</span>);</span><br><span class="line">  v5 = <span class="built_in">strlen</span>(v4);</span><br><span class="line">  v21 = &amp;v18;</span><br><span class="line">  v24 = byte_AE0;</span><br><span class="line">  v6 = &amp;v18 - (((v5 + <span class="number">16</span>) + <span class="number">15LL</span>) &amp; <span class="number">0xFFFFFFFFFFFFFFF0L</span>L);</span><br><span class="line">  v7 = v5;</span><br><span class="line">  v20 = v4;</span><br><span class="line">  <span class="built_in">memcpy</span>(v6, v4, v5);</span><br><span class="line">  v8 = v7 + <span class="number">15</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v7 &gt;= <span class="number">0</span> )</span><br><span class="line">    v8 = v7;</span><br><span class="line">  v9 = (v8 &amp; <span class="number">0xFFFFFFF0</span>) - v7;</span><br><span class="line">  v10 = v9 + v7 + <span class="number">16</span>;</span><br><span class="line">  v11 = v10;</span><br><span class="line">  v12 = v7 + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> ( v7 + <span class="number">1</span> &lt;= v10 )</span><br><span class="line">    v12 = v10;</span><br><span class="line">  <span class="built_in">memset</span>(&amp;v6[v7], v9 + <span class="number">16</span>, v12 - v7);</span><br><span class="line">  sm4_setkey_enc(v23, &amp;v24);</span><br><span class="line">  sm4_crypt_ecb(v23, <span class="number">1LL</span>, v11, v6, v6);</span><br><span class="line">  <span class="keyword">if</span> ( *v6 == <span class="number">0xDB</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v13 = <span class="number">-1LL</span>;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v6[v13 + <span class="number">2</span>] != byte_AF0[v13 + <span class="number">2</span>] || v6[v13 + <span class="number">3</span>] != byte_AF0[v13 + <span class="number">3</span>] || v6[v13 + <span class="number">4</span>] != byte_AF0[v13 + <span class="number">4</span>] )</span><br><span class="line">      &#123;</span><br><span class="line">        v13 = <span class="number">0LL</span>;</span><br><span class="line">        <span class="keyword">goto</span> LABEL_16;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> ( v13 == <span class="number">43</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      v14 = v13 + <span class="number">4</span>;</span><br><span class="line">      v15 = v6[v13 + <span class="number">5</span>] == byte_AF0[v13 + <span class="number">5</span>];</span><br><span class="line">      v13 += <span class="number">4LL</span>;</span><br><span class="line">      <span class="keyword">if</span> ( !v15 )</span><br><span class="line">      &#123;</span><br><span class="line">        v16 = v14 &lt; <span class="number">0x2F</span>;</span><br><span class="line">        <span class="keyword">goto</span> LABEL_15;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    v13 = <span class="number">47LL</span>;</span><br><span class="line">    v16 = <span class="number">0</span>;</span><br><span class="line">LABEL_15:</span><br><span class="line">    LOBYTE(v13) = !v16;</span><br><span class="line">LABEL_16:</span><br><span class="line">    v22 = v13;</span><br><span class="line">  &#125;</span><br><span class="line">  (*(*a1 + <span class="number">1360</span>))(a1, v19, v20);</span><br><span class="line">  <span class="keyword">if</span> ( __readfsqword(<span class="number">0x28u</span>) != v25 )</span><br><span class="line">    JUMPOUT(<span class="number">0x1615L</span>L);</span><br><span class="line">  <span class="keyword">return</span> v22;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用了标准SM4进行加密，密文是byte_AF数组，密钥是byte_AE0数组，直接使用CyberChief进行解密。</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/appfriend1.png" alt="appfriend1"></p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="Checkin"><a href="#Checkin" class="headerlink" title="Checkin"></a>Checkin</h3><p>flag: wmctf{W3lc0m3_t0_wmctf2025_4nd_h4v3_funNnnNnNN!}</p>
+<h3 id="Questionnaire"><a href="#Questionnaire" class="headerlink" title="Questionnaire"></a>Questionnaire</h3><p>flag: wmctf{Th4nk_u_4_supPorting_us!}</p>
+<h3 id="Voice-hacker（复现）"><a href="#Voice-hacker（复现）" class="headerlink" title="Voice_hacker（复现）"></a>Voice_hacker（复现）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">你能偷取他的声音吗？</span><br><span class="line"></span><br><span class="line">Can you steal his voice?</span><br><span class="line"></span><br><span class="line">百度网盘：https://pan.baidu.com/s/1ygNDlVCkRZZt6NKjGU-1xA?pwd=tzv8</span><br><span class="line"></span><br><span class="line">Google Dirve: https://drive.google.com/file/d/1OTCqmrymIT85vJwJAWIl9s1elORY0-Rh/view?usp=drive_link</span><br></pre></td></tr></table></figure>
+
+<p>题目描述说需要窃取声音，启动容器发现交互界面是录音，要求说出”CTF，启动!”，感觉有种开放世界探索游戏的味道（ ，F12查看网页源代码发现认证接口”&#x2F;api&#x2F;authenticate”，可以提交本地的音频。</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice1.png" alt="voice1"></p>
+<p>附件是.pcap文件，用wireshark打开，发现全部都是UDP数据报。</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice2.png" alt="voice2"></p>
+<p>上网查找UDP如何传输音频数据，参考了这篇文章 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/dier-gaohe/p/17716972.html">https://www.cnblogs.com/dier-gaohe/p/17716972.html</a> ，需要将UDP数据报解码为RTP。然后进入RTP流（电话-&gt;RTP-&gt;RTP流）发现有一对流，只是IP相反，分析发现这两个流传输的数据相同，使用其中一个即可。进入Play Streams，用export功能将RTP的payload提取出来保存为voice.raw文件。</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice3.png" alt="voice3"></p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice4.png" alt="voice4"></p>
+<p>接下来将voice.raw文件解析成output.wav，这里我直接使用了deepseek给的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sox -t ul -r 8000 -c 1 voice.raw output.wav</span><br></pre></td></tr></table></figure>
+
+<p>使用音乐播放器打开是一段80多秒的正常的对话，现在大概懂这道题的意思了，应该是使用音频内的人的音色来读出”CTF，启动!”，于是使用AI语音克隆工具进行音色克隆，再生成符合题意的音频.注意需要将.mp3转换为.wav，最后按接口进行提交得到flag。这里我使用的是 <a target="_blank" rel="noopener" href="https://aivoicecloning.io/zh">https://aivoicecloning.io/zh</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://81.70.100.5:30823//api/authenticate -F <span class="string">&quot;audio=@audio_202509221158.wav&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>响应如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;flag&quot;: &quot;WMCTF&#123;01a9a4f1-e748-43fa-8d6d-bba372016adc&#125;&quot;,</span><br><span class="line">  &quot;message&quot;: &quot;\u8ba4\u8bc1\u6210\u529f&quot;,</span><br><span class="line">  &quot;success&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Githacker"><a href="#Githacker" class="headerlink" title="Githacker"></a>Githacker</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">To be a GitHacker.</span><br><span class="line"></span><br><span class="line">百度网盘：https://pan.baidu.com/s/18iCGk0EHLha1rUAwdMEKMA?pwd=y8c4</span><br><span class="line"></span><br><span class="line">Google Dirve: https://drive.google.com/file/d/1sppWgVmrz8t0C6YeXqJIHKUCaPFgCc-U/view?usp=drive_link</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">View Hint: Hint 1:</span><br><span class="line">file is not image</span><br><span class="line">文件不是图片</span><br></pre></td></tr></table></figure>
+
+<p>这题目做一半卡死了，但只能说完成了1&#x2F;3。<br>附件就是一个git仓库，当前的master分支只有一个README.md文件，没有可用信息，想到了查看历史commit。查看.git&#x2F;logs&#x2F;refs&#x2F;heads&#x2F;master.txt:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0000000000000000000000000000000000000000 6b6285cc1283144db890f1b27cc8c7b6ccd4b643 toto &lt;toto@WMCTF2025.com&gt; 1754730819 +0800	commit (initial): Init</span><br><span class="line">6b6285cc1283144db890f1b27cc8c7b6ccd4b643 6ec92bcfdf3044bf21dcfa74500cbb929c0f0037 toto &lt;toto@WMCTF2025.com&gt; 1754730846 +0800	commit: encryptedFile</span><br><span class="line">6ec92bcfdf3044bf21dcfa74500cbb929c0f0037 a026274fb418ec88af16444644fccab9b8a7e8dd toto &lt;toto@WMCTF2025.com&gt; 1754730880 +0800	commit: password</span><br><span class="line">a026274fb418ec88af16444644fccab9b8a7e8dd 6ec92bcfdf3044bf21dcfa74500cbb929c0f0037 toto &lt;toto@WMCTF2025.com&gt; 1754730889 +0800	reset: moving to HEAD~1</span><br><span class="line">6ec92bcfdf3044bf21dcfa74500cbb929c0f0037 93ab7b9e28a4d442ec77a3fb37d64912bbddfdad toto &lt;toto@WMCTF2025.com&gt; 1754731172 +0800	commit: change password</span><br><span class="line">93ab7b9e28a4d442ec77a3fb37d64912bbddfdad d504bbf75693fc83f6cf5c873306b7fc67edd804 toto &lt;toto@WMCTF2025.com&gt; 1754731431 +0800	commit: encryptedFile</span><br><span class="line">d504bbf75693fc83f6cf5c873306b7fc67edd804 93ab7b9e28a4d442ec77a3fb37d64912bbddfdad toto &lt;toto@WMCTF2025.com&gt; 1754731474 +0800	reset: moving to HEAD~1</span><br><span class="line">93ab7b9e28a4d442ec77a3fb37d64912bbddfdad 484c0d313c560eb48986ef96690ef2f034addc90 toto &lt;toto@WMCTF2025.com&gt; 1754731529 +0800	commit: have a good time!</span><br></pre></td></tr></table></figure>
+
+<p>备注看起来很明显，第1个commit进行初始化，第2个commit提交了密文，第3个commit提交了密钥，第4个commit回退到上一次（HEAD~1表示第一个父提交即上一个提交），第5个commit提交修改后的密钥，第6个commit重新进行加密，后面又进行了退回。</p>
+<p>依次回退到每个commit，只找到了第1次提交的密钥<code>EasyP@ssw0rd_from_Git_History</code>和第一个加密文件image.png以及第二个加密文件image.jpg，暂时不知道密钥用在哪，也没有看见修改后的密钥，估计挺多人和我一样到这里就没有进展了。这两个文件没有任何常见文件的可识别标识，提示说文件不是图片，我觉得可能是加密了，尝试了一些使用密钥的加密算法的逆向，直接操作文件原始数据，然并卵。</p>
+<p>出题人说是使用了卷加密软件VeraCrypt，原来这两个文件是加密后的容器，这真无敌了。</p>
+<p>打开VeraCrypt（这软件甚至有防截图），随便选择一个盘符，然后选择刚刚的那个image.png文件进行加载，输入密钥进行解密，使用文件管理器对该新增盘符进行查看，里面是一个flag.txt文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Congratulations! This is half of the gift I gave you:</span><br><span class="line">WMCTF&#123;G00d_J0b_F1nding_Th3_0ld_V3rsi0n_</span><br><span class="line">Don&#x27;t forget the way you came!Please keep trying to find the remaining gifts!</span><br></pre></td></tr></table></figure>
+
+<p>意思是另一段flag在image.jpg文件里面，但问题是不知道修改后的密钥是什么，使用原来的密钥也不正确。</p>
+<p>这里读了Aristore师傅的WP：<a target="_blank" rel="noopener" href="https://www.aristore.top/posts/WMCTF2025">https://www.aristore.top/posts/WMCTF2025</a> ，知道了VeraCrypt的文档中有关于修改容器密钥的说明： <a target="_blank" rel="noopener" href="https://veracrypt.io/zh-cn/Changing%20Passwords%20and%20Keyfiles.html">https://veracrypt.io/zh-cn/Changing%20Passwords%20and%20Keyfiles.html</a> </p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/git1.png" alt="git1"></p>
+<p>意思就是加密卷的卷头是使用你的密码或者密钥文件的内容进行加密的，会包含用于加密整个卷的的主密钥，主密钥是一直不变的，不管你是否修改密码或者密钥文件的内容。那么可以在第一次解密image.png的时候备份加密卷头信息，第二次解密image.jpg的时候再用这份信息中的主密钥来挂载。</p>
+<p>流程：卸载之前已经解密的容器，仍然选择image.png那个容器，加载之前在<code>工具</code>中选择<code>备份加密卷头信息</code>，输入之前的密钥，保存文件。选择image.jpg容器，加载之前在<code>工具</code>中选择<code>恢复加密卷头信息</code>，选择刚刚备份的文件，输入之前的密钥（就是使用备份时使用的密钥来恢复），在对容器进行加载，就成功解密了，使用文件管理器对该新增盘符进行查看，里面也是一个flag.txt文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Congratulations! You&#x27;ve solved it!</span><br><span class="line">Figuring out the volume header manipulation trick is a sign of a true expert.</span><br><span class="line">You&#x27;ve earned this. Well played!</span><br><span class="line"></span><br><span class="line">And_Y0u_M4ster_The_VeraCrypt_H34der_Trick!&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flag: WMCTF{G00d_J0b_F1nding_Th3_0ld_V3rsi0n_And_Y0u_M4ster_The_VeraCrypt_H34der_Trick!}</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><h3 id="RTP协议"><a href="#RTP协议" class="headerlink" title="RTP协议"></a>RTP协议</h3><p>这里简单讲一下实时数据传输协议RTP（Real-time Transport Protocol）的原理：</p>
+<p>RTP协议是一种用于在互联网上传输音频和视频数据的<code>应用层协议</code>，它被设计用来支持实时多媒体通信应用，如VoIP、视频会议、流媒体等。以下是RTP数据报格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|V=2|P|X|  CC   |M|     PT      |       Sequence Number         |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                           Timestamp                           |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                           SSRC Identifier                     |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                           CSRC Identifiers                    |</span><br><span class="line">|                               ....                            |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                            Payload Data                       |</span><br><span class="line">|                               ....                            |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br></pre></td></tr></table></figure>
+<p>这里我引用csdn上的一篇文章对RTP数据报中的字段作解释，原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Dreamandpassion/article/details/107525385">https://blog.csdn.net/Dreamandpassion/article/details/107525385</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">·V：RTP协议的版本号，占2位，当前协议版本号为2。</span><br><span class="line"></span><br><span class="line">·P：填充标志，占1位，如果P=1，则在该报文的尾部将填充一个或多个额外的八位组，它们不是有效载荷的一部分。</span><br><span class="line"></span><br><span class="line">·X：扩展标志，占1位，如果X=1，则在RTP报头后跟有一个扩展报头。</span><br><span class="line"></span><br><span class="line">·CC：CSRC计数器，占 4位，指示CSRC 标识符的个数。主要用于多流组合传播，比如说5个人发送rtp到网关边缘，边缘把5个rtp转发给另外一个边缘，然后解出原始流。</span><br><span class="line"></span><br><span class="line">·M: 标记，占1位，不同的有效载荷有不同的含义，对于视频，标记一帧的结束；对于音频，标记会话的开始。</span><br><span class="line"></span><br><span class="line">·PT: 有效载荷类型，占7位，用于说明RTP报文中有效载荷的类型，如GSM音频、JPEM图像等。</span><br><span class="line"></span><br><span class="line">·序列号：占16位，用于标识发送者所发送的RTP报文的序列号，每发送一个报文，序列号增1。接收者通过序列号来检测报文丢失情况，重新排序报文，恢复数据。</span><br><span class="line"></span><br><span class="line">·时戳 (Timestamp)：占32位，时戳反映了该RTP报文的第一个八位组的采样时刻。接收者使用时戳来计算延迟和延迟抖动，并进行同步控制。</span><br><span class="line"></span><br><span class="line">·同步信源(SSRC)标识符：占32位，用于标识同步信源。该标识符是随机选择的，参加同一视频会议的两个同步信源不能有相同的SSRC。</span><br><span class="line"></span><br><span class="line">·特约信源(CSRC)标识符：每个CSRC标识符占32位，可以有0～15个。每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</span><br></pre></td></tr></table></figure>
+
+<p>重点：其中PT（9-15位，占7位）说明了payload类型，有如下类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PT值	编码格式	             描述	            采样率</span><br><span class="line">0	    PCMU (G.711 μ-law)	 北美标准电话音频	    8 kHz</span><br><span class="line">8	    PCMA (G.711 A-law)	 欧洲标准电话音频	    8 kHz</span><br><span class="line">9	    G.722	             高质量语音编码	        16 kHz</span><br><span class="line">18	    G.729	             压缩语音编码	        8 kHz</span><br><span class="line">26	    JPEG	             视频：Motion JPEG	    -</span><br><span class="line">31	    H.261	             视频编码	            -</span><br><span class="line">33	    MP2T	             MPEG-2传输流	        -</span><br></pre></td></tr></table></figure>
+
+<p>那么对于这道题，前面我无脑使用了deepseek给的命令，但其实是默认了使用的是μ-law格式，即G.711 μ-law编码，正常来说应该先查看RTP的头部字段来进行判断，查看方法有很多。</p>
+<p>在wireshark中可以直接点击UDP报文查看RTP头部字段信息：</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice5.png" alt="voice5"></p>
+<p>也可以追踪UDP流：</p>
+<p><img src="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/voice6.png" alt="voice6"></p>
+<p>或者也可以使用tshark提取UDP搭载的RTP数据（<code>UDP的payload</code>），输出指定字段——data，也就是原始的十六进制数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark -r out.pcap -T fields -e data &gt; udp_data.txt</span><br></pre></td></tr></table></figure>
+
+<p>我这里的分析参考了Aristore师傅的WP，原文链接：<a target="_blank" rel="noopener" href="https://www.aristore.top/posts/WMCTF2025/">https://www.aristore.top/posts/WMCTF2025/</a></p>
+<p>截取前面几条，可以看到所有包的中前2个字节（表示前16位）都是80 00，转换成二进制表示RTP头部字段前16为1000 0000 0000 0000，那么对应的PT（9-15位）就是0，表示payload格式为PCMU（G.711 μ-law），采样率为8kHz；次两个字节16位二进制表示序列号，可以发现这些数据包是连续传输的，属于一次数据发送的不同数据段；再接着4个字节，即SSRC，都是0x12345678，说明这些报文来自同一个音频流。这里可以发现前面一半的RTP数据报的SSRC是0x12345678，后面一半的是0x87654321，说明是另一个IP发来的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">800000000000000012345678fdfbfbfbfcfdfefdfdfdfcfcfdfdfdfdfdfdfdfdfdfefdfdfefefefefffefefefefefefefefefefefefefefefffeffff7e7e7e7eff7efffefefefdfefefefeffffff7e7e7e7e7e7e7e7efffefefefefefefefefeffff7e7e7e7d7e7e7efffffefefdfefdfefefeff7e7e7e7e7e7e7e7efffffefefefdfdfefeffff7e7e7d7d7d7e7e7efffefefefdfdfefefefeff7e7e7d7d7d7d7e7e7efffefefdfdfdfdfdfe</span><br><span class="line">80000001000000a012345678fffeff7e7d7d7d7d7d7e7efffefdfdfdfdfdfdfdfeffff7e7d7d7d7d7e7e7efffefefdfdfdfdfefefeffff7e7e7e7e7e7e7efffefefefdfefdfdfefefeff7e7e7e7e7e7e7e7efffefefefefefefefeffffffff7e7e7eff7e7efffefefefefefefefefeffffff7e7e7e7e7e7e7e7efffefefefefefefefefeffff7e7e7e7e7e7e7e7efffefefefefefefefeffffffff7e7e7e7e7e7e7efffffefefefefefefefe</span><br><span class="line">800000020000014012345678feffff7e7e7e7e7e7efffffffefefefdfdfefefeffff7e7e7e7d7d7e7efffffefefdfdfdfdfefeffff7e7e7e7e7e7efffefefefefdfdfdfdfeffff7e7e7d7d7e7e7e7efffefefdfdfdfdfefeffff7e7e7e7d7e7e7efffefefefdfdfdfefefeff7e7e7d7d7e7e7e7efffefefdfdfdfdfdfeff7e7e7d7d7d7d7e7e7efffefefdfdfcfdfdfeff7e7e7d7d7d7d7d7e7efefefdfdfcfcfdfdfeff7e7d7d7c7c7d7d7e</span><br><span class="line">80000003000001e012345678fffffefdfdfcfcfcfdfeff7e7d7c7c7c7c7d7e7efefdfcfbfbfcfcfeff7e7d7c7b7b7c7c7e7efefdfcfbfbfbfbfcfdff7d7c7b7a7a7b7c7dfffdfbfafafafbfcfdff7d7c7a7a7a7b7c7d7efefdfcfbfafafbfcfeff7d7c7b7b7b7b7c7d7efefdfcfbfbfcfcfdfe7e7e7d7c7c7b7c7d7d7efefdfdfcfcfbfcfdfdfe7e7e7d7c7c7c7d7efffdfcfbfcfcfdfeff7e7e7e7d7d7e7d7d7e7efefdfcfbfcfcfdff7e7d</span><br><span class="line">........</span><br></pre></td></tr></table></figure>
+
+<p>可以直接使用sox提取音频：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sox -t ul -r 8000 -c 1 voice.raw output.wav</span><br><span class="line"><span class="comment"># 表示提取PCMU格式的文件</span></span><br></pre></td></tr></table></figure>
+
+<p>参数-t表示输入文件的类型，-r表示采样率，-c表示声道数。可以自行查阅不同RTP payload对应的参数，这里不一一列出。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">SkyAur0ra</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/">http://example.com/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">天空极光 (๑´ڡ`๑)</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF/">CTF</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar2.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/07/03/W4terCTF-2025-WriteUp-Thops-s-Barrier/" title="W4terCTF 2025 WriteUp - Thops's Barrier"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">W4terCTF 2025 WriteUp - Thops's Barrier</div></div><div class="info-2"><div class="info-item-1">W4terCTF 2025的参赛回顾和WriteUp</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/07/03/W4terCTF-2025-WriteUp-Thops-s-Barrier/" title="W4terCTF 2025 WriteUp - Thops&#39;s Barrier"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-03</div><div class="info-item-2">W4terCTF 2025 WriteUp - Thops&#39;s Barrier</div></div><div class="info-2"><div class="info-item-1">W4terCTF 2025的参赛回顾和WriteUp</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar2.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">SkyAur0ra</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/SkyAur0ra"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/SkyAur0ra" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:3127591945@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #c71d23;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%90%E7%BB%A9"><span class="toc-number">1.</span> <span class="toc-text">成绩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E9%A1%BE"><span class="toc-number">2.</span> <span class="toc-text">回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reverse"><span class="toc-number">3.</span> <span class="toc-text">reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Catfriend"><span class="toc-number">3.1.</span> <span class="toc-text">Catfriend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appfriend"><span class="toc-number">3.2.</span> <span class="toc-text">Appfriend</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Misc"><span class="toc-number">4.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checkin"><span class="toc-number">4.1.</span> <span class="toc-text">Checkin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Questionnaire"><span class="toc-number">4.2.</span> <span class="toc-text">Questionnaire</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Voice-hacker%EF%BC%88%E5%A4%8D%E7%8E%B0%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">Voice_hacker（复现）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Githacker"><span class="toc-number">4.4.</span> <span class="toc-text">Githacker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">5.</span> <span class="toc-text">知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RTP%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.1.</span> <span class="toc-text">RTP协议</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/23/WMCTF-2025-WriteUp%E4%B8%8E%E5%A4%8D%E7%8E%B0/" title="WMCTF-2025 WriteUp与复现">WMCTF-2025 WriteUp与复现</a><time datetime="2025-09-23T03:28:43.000Z" title="发表于 2025-09-23 11:28:43">2025-09-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/W4terCTF-2025-WriteUp-Thops-s-Barrier/" title="W4terCTF 2025 WriteUp - Thops's Barrier">W4terCTF 2025 WriteUp - Thops's Barrier</a><time datetime="2025-07-03T15:38:14.000Z" title="发表于 2025-07-03 23:38:14">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/23/%E6%88%90%E9%95%BF%E4%B9%8B%E5%A7%8B/" title="成长之始">成长之始</a><time datetime="2025-04-23T11:54:23.430Z" title="发表于 2025-04-23 19:54:23">2025-04-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/background1.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By SkyAur0ra</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'SkyAur0ra/SkyAur0ra.github.io',
+      'data-repo-id': 'R_kgDOOeXcqQ',
+      'data-category-id': 'DIC_kwDOOeXcqc4CschL',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
